@@ -1,11 +1,11 @@
 #!/bin/bash -x
 
-#Variables
-headCount=0
-tailCount=0
-
 #Flip a coin till either Heads or Tails won 21 times
 function flipACoin(){
+	#Variables
+	headCount=0
+	tailCount=0
+
 	while [ $headCount -lt 21 ] || [ $tailCount -lt 21 ]
 	do
 		isHead=1
@@ -27,8 +27,21 @@ function calculateDifference(){
 	echo $diff
 }
 
-#To show the winning status
-function winningResults(){
+#To check Tie and continues till minimum difference of 2 is achieved
+function checkTie(){
+	difference=$1
+	while [ $difference -lt 2 ]
+	do
+		echo -e "Game is continuing till minimum difference of 2 times...\n"
+		flipACoin
+		winningresults
+	done
+}
+
+#To check the Winning or Tie status
+function winningresults(){
+	echo "Head: $headCount times"
+	echo "Tail: $tailCount times"
 	if [ $headCount -gt $tailCount ]
 	then
 		difference="$( calculateDifference $headCount $tailCount )"
@@ -39,12 +52,17 @@ function winningResults(){
 		echo "TAILS Won by $difference times!"
 	else
 		echo "Its a Tie!"
+		difference="$( calculateDifference $headCount $tailCount )"
+		checkTie $difference
 	fi
-	echo "Head: $headCount times"
-	echo "Tail: $tailCount times"
+}
+
+#To perform flipcoin simulation
+function flipCoinSimulation(){
+	flipACoin
+	winningresults
 }
 
 #Main
-flipACoin
-winningResults
+flipCoinSimulation
 
